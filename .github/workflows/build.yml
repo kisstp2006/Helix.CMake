@@ -1,0 +1,73 @@
+name: build
+
+on:
+  workflow_call:
+    inputs:
+      run-tests:
+        type: boolean
+        default: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [debug, release]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build and test
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do set VS=%%i
+          call "%VS%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          cmake --preset windows-${{ matrix.config }} || exit /b 1
+          cmake --build --preset windows-${{ matrix.config }} || exit /b 1
+          if "${{ inputs.run-tests }}"=="true" ctest --preset windows-${{ matrix.config }} || exit /b 1
+
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [debug, release]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - run: sudo apt-get update && sudo apt-get install -y ninja-build clang
+      - run: cmake --preset linux-${{ matrix.config }}
+      - run: cmake --build --preset linux-${{ matrix.config }}
+      - if: inputs.run-tests
+        run: ctest --preset linux-${{ matrix.config }}
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - run: sudo apt-get update && sudo apt-get install -y ninja-build
+      - run: cmake --preset android-arm64-release
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_LATEST_HOME }}
+      - run: cmake --build --preset android-arm64-release
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.x
+          dotnet-quality: preview
+      - run: dotnet workload install wasm-tools
+      - run: sudo apt-get update && sudo apt-get install -y ninja-build
+      - run: cmake --preset web-release
+      - run: cmake --build --preset web-release
+      - if: inputs.run-tests
+        run: ctest --preset web-release

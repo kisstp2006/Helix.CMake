@@ -1,0 +1,73 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "helix-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}"
+    },
+    {
+      "name": "helix-debug",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "helix-release",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "helix-windows",
+      "hidden": true,
+      "inherits": "helix-base",
+      "cacheVariables": { "CMAKE_CXX_COMPILER": "cl" },
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    {
+      "name": "helix-linux",
+      "hidden": true,
+      "inherits": "helix-base",
+      "cacheVariables": { "CMAKE_CXX_COMPILER": "clang++" },
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "helix-android",
+      "hidden": true,
+      "inherits": "helix-base",
+      "toolchainFile": "${fileDir}/../toolchains/android.cmake"
+    },
+    {
+      "name": "helix-web",
+      "hidden": true,
+      "inherits": "helix-base",
+      "toolchainFile": "${fileDir}/../toolchains/web.cmake"
+    },
+    { "name": "windows-debug", "inherits": ["helix-windows", "helix-debug"] },
+    { "name": "windows-release", "inherits": ["helix-windows", "helix-release"] },
+    { "name": "linux-debug", "inherits": ["helix-linux", "helix-debug"] },
+    { "name": "linux-release", "inherits": ["helix-linux", "helix-release"] },
+    { "name": "android-arm64-debug", "inherits": ["helix-android", "helix-debug"] },
+    { "name": "android-arm64-release", "inherits": ["helix-android", "helix-release"] },
+    { "name": "web-debug", "inherits": ["helix-web", "helix-debug"] },
+    { "name": "web-release", "inherits": ["helix-web", "helix-release"] }
+  ],
+  "buildPresets": [
+    { "name": "windows-debug", "configurePreset": "windows-debug" },
+    { "name": "windows-release", "configurePreset": "windows-release" },
+    { "name": "linux-debug", "configurePreset": "linux-debug" },
+    { "name": "linux-release", "configurePreset": "linux-release" },
+    { "name": "android-arm64-debug", "configurePreset": "android-arm64-debug" },
+    { "name": "android-arm64-release", "configurePreset": "android-arm64-release" },
+    { "name": "web-debug", "configurePreset": "web-debug" },
+    { "name": "web-release", "configurePreset": "web-release" }
+  ],
+  "testPresets": [
+    { "name": "windows-debug", "configurePreset": "windows-debug", "output": { "outputOnFailure": true } },
+    { "name": "windows-release", "configurePreset": "windows-release", "output": { "outputOnFailure": true } },
+    { "name": "linux-debug", "configurePreset": "linux-debug", "output": { "outputOnFailure": true } },
+    { "name": "linux-release", "configurePreset": "linux-release", "output": { "outputOnFailure": true } },
+    { "name": "web-debug", "configurePreset": "web-debug", "output": { "outputOnFailure": true } },
+    { "name": "web-release", "configurePreset": "web-release", "output": { "outputOnFailure": true } }
+  ]
+}
