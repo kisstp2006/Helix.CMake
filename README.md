@@ -12,6 +12,7 @@ Helix.<Name>/
     <Topic>/Platform/<Os>/<Class><Os>.cpp  Os = Win, Linux, Android, Web, Posix
   Tests/<Topic>/<Class>Test.cpp            mirrors Source/
   Benchmarks/                              benchmarks
+  Fuzz/                                    fuzz targets of the parsers
   Examples/<Example>/<Example>.cpp         runnable examples, Examples/Shared for common files
   Tools/                                   generators and scripts
   External/Helix.<Dependency>/             git submodules
@@ -32,7 +33,7 @@ Helix.<Name>/
 | `Modules/HelixPlatform.cmake` | Platform detection (`windows`, `linux`, `android`, `web`) and platform folder names |
 | `Modules/HelixOptions.cmake` | C++23, warnings, no exceptions and no RTTI for runtime targets |
 | `Modules/HelixDependencies.cmake` | `helix_require(Name)` resolves `Helix.<Name>` from `External/` |
-| `Modules/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite` |
+| `Modules/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite`, `helix_add_fuzz_suite` |
 | `Toolchains/Android.cmake` | Android NDK, arm64-v8a, API 24 |
 | `Toolchains/Web.cmake` | Emscripten from the .NET `wasm-tools` workload |
 | `Presets/HelixPresets.json` | Configure, build and test presets for every platform |
