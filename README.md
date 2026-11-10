@@ -38,6 +38,7 @@ Helix.<Name>/
 | `Presets/HelixPresets.json` | Configure, build and test presets for every platform |
 | `Tests/Sample/` | A minimal library and executable in the standard layout |
 | `.github/workflows/build.yml` | Reusable CI workflow for all platforms |
+| `.github/workflows/dotnet.yml` | Reusable CI workflow for C# repositories (build and run a test project) |
 
 ## Using it in a repository
 
