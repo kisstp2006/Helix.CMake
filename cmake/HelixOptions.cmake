@@ -29,7 +29,7 @@ function(helix_apply_options target)
     target_compile_definitions(${target} PUBLIC HX_PLATFORM_${platform_upper}=1)
 
     if(MSVC)
-        target_compile_options(${target} PRIVATE /W4 /permissive- /utf-8 /Zc:__cplusplus /Zc:preprocessor /Zc:inline /Gy /Gw)
+        target_compile_options(${target} PRIVATE /W4 /wd4324 /permissive- /utf-8 /Zc:__cplusplus /Zc:preprocessor /Zc:inline /Gy /Gw)
         if(HELIX_WARNINGS_AS_ERRORS)
             target_compile_options(${target} PRIVATE /WX)
         endif()
