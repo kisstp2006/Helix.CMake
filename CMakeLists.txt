@@ -3,4 +3,4 @@ project(Helix.CMake LANGUAGES CXX)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/Helix.cmake")
 
-add_subdirectory(tests/sample)
+add_subdirectory(Tests/Sample)

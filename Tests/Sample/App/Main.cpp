@@ -1,4 +1,4 @@
-#include <helix/sample/sample.h>
+#include <Helix/Sample/Sample.h>
 #include <cstdio>
 
 int main()

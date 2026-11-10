@@ -20,6 +20,9 @@ else()
 endif()
 
 set(HELIX_ALL_PLATFORMS windows linux android web)
+set(HELIX_PLATFORM_FOLDERS Win Linux Android Web)
+list(FIND HELIX_ALL_PLATFORMS ${HELIX_PLATFORM} platform_index)
+list(GET HELIX_PLATFORM_FOLDERS ${platform_index} HELIX_PLATFORM_FOLDER)
 set(HELIX_POSIX_PLATFORMS linux android web)
 
 if(HELIX_PLATFORM IN_LIST HELIX_POSIX_PLATFORMS)

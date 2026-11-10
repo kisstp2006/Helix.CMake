@@ -35,13 +35,13 @@
       "name": "helix-android",
       "hidden": true,
       "inherits": "helix-base",
-      "toolchainFile": "${fileDir}/../toolchains/android.cmake"
+      "toolchainFile": "${fileDir}/../Toolchains/Android.cmake"
     },
     {
       "name": "helix-web",
       "hidden": true,
       "inherits": "helix-base",
-      "toolchainFile": "${fileDir}/../toolchains/web.cmake"
+      "toolchainFile": "${fileDir}/../Toolchains/Web.cmake"
     },
     { "name": "windows-debug", "inherits": ["helix-windows", "helix-debug"] },
     { "name": "windows-release", "inherits": ["helix-windows", "helix-release"] },

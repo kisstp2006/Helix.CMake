@@ -1,25 +1,46 @@
 # Helix.CMake
 
-Shared CMake modules, toolchains and presets for all Helix repositories.
+Shared CMake modules, toolchains, presets and CI workflow for all Helix repositories.
+
+## Repository layout (all Helix repositories)
+
+```
+Helix.<Name>/
+  Source/Helix/<Name>/                     the library; Source/ is the include root
+    <Topic>/<Class>.h                      public headers, one class per file, PascalCase
+    <Topic>/Implementation/<Class>.cpp     sources and internal headers of the topic
+    <Topic>/Platform/<Os>/<Class><Os>.cpp  Os = Win, Linux, Android, Web, Posix
+  Tests/<Topic>/<Class>Test.cpp            mirrors Source/
+  Benchmarks/                              benchmarks
+  Examples/<Example>/<Example>.cpp         runnable examples, Examples/Shared for common files
+  Tools/                                   generators and scripts
+  External/Helix.<Dependency>/             git submodules
+  CMakeLists.txt, CMakePresets.json, README.md, LICENSE, .github/
+```
+
+- Includes always use the full path: `#include <Helix/Core/Containers/Array.h>`.
+- Small libraries keep their headers directly in `Source/Helix/<Name>/` without topic folders.
+- Files under `Platform/Win/` build only on Windows, `Platform/Linux/` only on Linux, `Platform/Android/` only on Android, `Platform/Web/` only on the web, `Platform/Posix/` on Linux, Android and the web.
 
 ## Contents
 
 | Path | Purpose |
 |---|---|
 | `Helix.cmake` | Entry point included by every repository |
-| `cmake/HelixPlatform.cmake` | Platform detection (`windows`, `linux`, `android`, `web`) |
-| `cmake/HelixOptions.cmake` | C++23, warnings, no exceptions and no RTTI for runtime targets |
-| `cmake/HelixDependencies.cmake` | `helix_require(Name)` resolves `Helix.<Name>` from `external/` |
-| `cmake/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite` |
-| `toolchains/android.cmake` | Android NDK, arm64-v8a, API 24 |
-| `toolchains/web.cmake` | Emscripten from the .NET `wasm-tools` workload |
-| `presets/HelixPresets.json` | Configure, build and test presets for every platform |
+| `Modules/HelixPlatform.cmake` | Platform detection (`windows`, `linux`, `android`, `web`) and platform folder names |
+| `Modules/HelixOptions.cmake` | C++23, warnings, no exceptions and no RTTI for runtime targets |
+| `Modules/HelixDependencies.cmake` | `helix_require(Name)` resolves `Helix.<Name>` from `External/` |
+| `Modules/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite` |
+| `Toolchains/Android.cmake` | Android NDK, arm64-v8a, API 24 |
+| `Toolchains/Web.cmake` | Emscripten from the .NET `wasm-tools` workload |
+| `Presets/HelixPresets.json` | Configure, build and test presets for every platform |
+| `Tests/Sample/` | A minimal library and executable in the standard layout |
 | `.github/workflows/build.yml` | Reusable CI workflow for all platforms |
 
 ## Using it in a repository
 
 ```
-git submodule add https://github.com/kisstp2006/Helix.CMake external/Helix.CMake
+git submodule add https://github.com/kisstp2006/Helix.CMake External/Helix.CMake
 ```
 
 `CMakeLists.txt`:
@@ -28,19 +49,17 @@ git submodule add https://github.com/kisstp2006/Helix.CMake external/Helix.CMake
 cmake_minimum_required(VERSION 3.28)
 project(Helix.Example LANGUAGES CXX)
 if(NOT COMMAND helix_add_library)
-    include(external/Helix.CMake/Helix.cmake)
+    include(External/Helix.CMake/Helix.cmake)
 endif()
 helix_add_library(helix_example ALIAS Example)
+helix_add_test_suite(helix_example_tests DEPS Helix::Example)
 ```
 
 `CMakePresets.json`:
 
 ```json
-{ "version": 6, "include": ["external/Helix.CMake/presets/HelixPresets.json"] }
+{ "version": 6, "include": ["External/Helix.CMake/Presets/HelixPresets.json"] }
 ```
-
-Sources are collected from `src/`. Files under `src/platform/<platform>/` are only built for
-that platform, files under `src/platform/posix/` for Linux, Android and the web.
 
 ## Presets
 

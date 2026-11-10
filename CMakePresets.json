@@ -1,4 +1,4 @@
 {
   "version": 6,
-  "include": ["presets/HelixPresets.json"]
+  "include": ["Presets/HelixPresets.json"]
 }

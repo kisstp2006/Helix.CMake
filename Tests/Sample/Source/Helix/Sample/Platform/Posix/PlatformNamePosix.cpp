@@ -1,4 +1,4 @@
-#include <helix/sample/sample.h>
+#include <Helix/Sample/Sample.h>
 
 const char* helix::sample::PlatformName()
 {
