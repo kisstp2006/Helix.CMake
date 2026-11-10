@@ -19,6 +19,8 @@ Helix.<Name>/
 ```
 
 - Includes always use the full path: `#include <Helix/Core/Containers/Array.h>`.
+- Every repository lists all of its direct and indirect dependencies in its own `External/`; the build uses only that level,
+  so submodules are fetched without `--recursive` (nested checkouts exceed the Windows path limit).
 - Small libraries keep their headers directly in `Source/Helix/<Name>/` without topic folders.
 - Files under `Platform/Win/` build only on Windows, `Platform/Linux/` only on Linux, `Platform/Android/` only on Android, `Platform/Web/` only on the web, `Platform/Posix/` on Linux, Android and the web.
 
