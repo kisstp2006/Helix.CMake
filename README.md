@@ -31,14 +31,14 @@ Helix.<Name>/
 |---|---|
 | `Helix.cmake` | Entry point included by every repository |
 | `Modules/HelixPlatform.cmake` | Platform detection (`windows`, `linux`, `android`, `web`) and platform folder names |
-| `Modules/HelixOptions.cmake` | C++23, warnings, no exceptions and no RTTI for runtime targets |
+| `Modules/HelixOptions.cmake` | C++23, warnings, no exceptions and no RTTI for runtime targets, `HELIX_ENABLE_ASAN` |
 | `Modules/HelixDependencies.cmake` | `helix_require(Name)` resolves `Helix.<Name>` from `External/` |
 | `Modules/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite`, `helix_add_fuzz_suite` |
 | `Toolchains/Android.cmake` | Android NDK, arm64-v8a, API 24 |
 | `Toolchains/Web.cmake` | Emscripten from the .NET `wasm-tools` workload |
 | `Presets/HelixPresets.json` | Configure, build and test presets for every platform |
 | `Tests/Sample/` | A minimal library and executable in the standard layout |
-| `.github/workflows/build.yml` | Reusable CI workflow for all platforms |
+| `.github/workflows/build.yml` | Reusable CI workflow for all platforms; `sanitize: true` adds the AddressSanitizer builds and tests |
 | `.github/workflows/dotnet.yml` | Reusable CI workflow for C# repositories (build and run a test project) |
 
 ## Using it in a repository
@@ -73,6 +73,7 @@ helix_add_test_suite(helix_example_tests DEPS Helix::Example)
 | `linux-debug`, `linux-release` | clang, ninja |
 | `android-arm64-debug`, `android-arm64-release` | Android NDK, `ANDROID_NDK_HOME` or `ANDROID_HOME` |
 | `web-debug`, `web-release` | .NET SDK with `dotnet workload install wasm-tools`, `DOTNET_ROOT` or `HELIX_DOTNET_ROOT` |
+| `windows-fuzz`, `linux-fuzz` | As above; optimized with assertions on, AddressSanitizer and debug information, for long fuzz runs |
 
 ```
 cmake --preset windows-debug

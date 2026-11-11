@@ -18,6 +18,16 @@
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
+      "name": "helix-fuzz",
+      "hidden": true,
+      "description": "Optimized, assertions on (no NDEBUG), AddressSanitizer, debug information; for long fuzz runs",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "HELIX_ENABLE_ASAN": "ON",
+        "HELIX_BUILD_BENCHMARKS": "OFF"
+      }
+    },
+    {
       "name": "helix-windows",
       "hidden": true,
       "inherits": "helix-base",
@@ -47,6 +57,19 @@
     { "name": "windows-release", "inherits": ["helix-windows", "helix-release"] },
     { "name": "linux-debug", "inherits": ["helix-linux", "helix-debug"] },
     { "name": "linux-release", "inherits": ["helix-linux", "helix-release"] },
+    {
+      "name": "windows-fuzz",
+      "inherits": ["helix-windows", "helix-fuzz"],
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "/O2 /Ob2 /Zi",
+        "CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO": "/DEBUG /INCREMENTAL:NO"
+      }
+    },
+    {
+      "name": "linux-fuzz",
+      "inherits": ["helix-linux", "helix-fuzz"],
+      "cacheVariables": { "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "-O2 -g" }
+    },
     { "name": "android-arm64-debug", "inherits": ["helix-android", "helix-debug"] },
     { "name": "android-arm64-release", "inherits": ["helix-android", "helix-release"] },
     { "name": "web-debug", "inherits": ["helix-web", "helix-debug"] },
@@ -57,6 +80,8 @@
     { "name": "windows-release", "configurePreset": "windows-release" },
     { "name": "linux-debug", "configurePreset": "linux-debug" },
     { "name": "linux-release", "configurePreset": "linux-release" },
+    { "name": "windows-fuzz", "configurePreset": "windows-fuzz" },
+    { "name": "linux-fuzz", "configurePreset": "linux-fuzz" },
     { "name": "android-arm64-debug", "configurePreset": "android-arm64-debug" },
     { "name": "android-arm64-release", "configurePreset": "android-arm64-release" },
     { "name": "web-debug", "configurePreset": "web-debug" },
@@ -67,6 +92,8 @@
     { "name": "windows-release", "configurePreset": "windows-release", "output": { "outputOnFailure": true } },
     { "name": "linux-debug", "configurePreset": "linux-debug", "output": { "outputOnFailure": true } },
     { "name": "linux-release", "configurePreset": "linux-release", "output": { "outputOnFailure": true } },
+    { "name": "windows-fuzz", "configurePreset": "windows-fuzz", "output": { "outputOnFailure": true } },
+    { "name": "linux-fuzz", "configurePreset": "linux-fuzz", "output": { "outputOnFailure": true } },
     { "name": "web-debug", "configurePreset": "web-debug", "output": { "outputOnFailure": true } },
     { "name": "web-release", "configurePreset": "web-release", "output": { "outputOnFailure": true } }
   ]
