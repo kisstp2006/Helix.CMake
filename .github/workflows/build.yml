@@ -72,6 +72,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+      - if: inputs.dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.x
+          dotnet-quality: preview
       - name: Build and test with AddressSanitizer
         shell: cmd
         run: |
@@ -91,6 +96,11 @@ jobs:
           submodules: true
       - timeout-minutes: 10
         run: sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=20 update && sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=20 install -y ninja-build clang libx11-dev xvfb libegl1 libegl-mesa0 libgl1-mesa-dri libopengl0 libgles2
+      - if: inputs.dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.x
+          dotnet-quality: preview
       - run: cmake --preset linux-fuzz
       - run: cmake --build --preset linux-fuzz
       - if: inputs.run-tests
