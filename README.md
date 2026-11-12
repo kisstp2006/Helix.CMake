@@ -33,8 +33,8 @@ Helix.<Name>/
 | `Modules/HelixPlatform.cmake` | Platform detection (`windows`, `linux`, `android`, `web`) and platform folder names |
 | `Modules/HelixOptions.cmake` | C++23, warnings, no exceptions and no RTTI for runtime targets, `HELIX_ENABLE_ASAN` |
 | `Modules/HelixDependencies.cmake` | `helix_require(Name)` resolves `Helix.<Name>` from `External/`; `helix_dependency_dir(out Name)` finds its folder (also for repos without CMake) |
-| `Modules/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite`, `helix_add_fuzz_suite` |
-| `Toolchains/Android.cmake` | Android NDK, arm64-v8a, API 24 |
+| `Modules/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite`, `helix_add_fuzz_suite`, `helix_add_shared_runtime` |
+| `Toolchains/Android.cmake` | Android NDK, arm64-v8a, API 24, the shared C++ runtime (`HELIX_ANDROID_STL_LIBRARY`, which applications carry) |
 | `Toolchains/Web.cmake` | Emscripten from the .NET `wasm-tools` workload |
 | `Presets/HelixPresets.json` | Configure, build and test presets for every platform |
 | `Tests/Sample/` | A minimal library and executable in the standard layout |
@@ -64,6 +64,14 @@ helix_add_test_suite(helix_example_tests DEPS Helix::Example)
 ```json
 { "version": 6, "include": ["External/Helix.CMake/Presets/HelixPresets.json"] }
 ```
+
+## Shared runtimes
+
+`helix_add_shared_runtime(<target> ROOT <static library> ALIAS <name> OUTPUT_NAME <file name>)` makes one shared
+library of a static library and every static Helix library it links (their object files, every symbol exported), for
+programs that load modules at run time: the program and its modules link it and share one copy of the libraries'
+state. Code built against it gets `HX_SHARED_IMPORT`, under which `HX_IMPORT_DATA` (Helix.Core) imports the global
+data headers read on Windows. It is built only when something links it, and not on the Web.
 
 ## Presets
 
