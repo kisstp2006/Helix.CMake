@@ -33,6 +33,7 @@ Helix.<Name>/
 | `Modules/HelixPlatform.cmake` | Platform detection (`windows`, `linux`, `android`, `web`) and platform folder names |
 | `Modules/HelixOptions.cmake` | C++23, warnings, no exceptions and no RTTI for runtime targets, `HELIX_ENABLE_ASAN` |
 | `Modules/HelixDependencies.cmake` | `helix_require(Name)` resolves `Helix.<Name>` from `External/`; `helix_dependency_dir(out Name)` finds its folder (also for repos without CMake) |
+| `Modules/HelixDotnet.cmake` | `HELIX_DOTNET`, `helix_dotnet_runtime_version`, `helix_dotnet_pack` (a runtime, crossgen2 or other pack of the NuGet cache, restored through a PackageDownload project of its exact version when missing), `helix_dotnet_ready_to_run` (ReadyToRun images through crossgen2), `helix_set_dotnet_web_executable` (who makes `DOTNET` executables on the Web) |
 | `Modules/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite`, `helix_add_fuzz_suite`, `helix_add_shared_runtime` |
 | `Toolchains/Android.cmake` | Android NDK, arm64-v8a, API 24, the shared C++ runtime (`HELIX_ANDROID_STL_LIBRARY`, which applications carry) |
 | `Toolchains/Web.cmake` | Emscripten from the .NET `wasm-tools` workload |
