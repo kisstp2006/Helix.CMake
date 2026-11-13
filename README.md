@@ -35,6 +35,8 @@ Helix.<Name>/
 | `Modules/HelixDependencies.cmake` | `helix_require(Name)` resolves `Helix.<Name>` from `External/`; `helix_dependency_dir(out Name)` finds its folder (also for repos without CMake) |
 | `Modules/HelixDotnet.cmake` | `HELIX_DOTNET`, `helix_dotnet_runtime_version`, `helix_dotnet_pack` (a runtime, crossgen2 or other pack of the NuGet cache, restored through a PackageDownload project of its exact version when missing), `helix_dotnet_ready_to_run` (ReadyToRun images through crossgen2), `helix_set_dotnet_web_executable` (who makes `DOTNET` executables on the Web) |
 | `Modules/HelixTargets.cmake` | `helix_add_library`, `helix_add_executable`, `helix_add_test_suite`, `helix_add_benchmark_suite`, `helix_add_fuzz_suite`, `helix_add_shared_runtime` |
+| `Modules/HelixBuildCache.cmake` | The shared object cache of local builds (`HELIX_BUILD_CACHE`, `HELIX_BUILD_CACHE_SIZE`) |
+| `Tools/CompileCache/` | `HelixCompileCache`: the compiler launcher of the object cache (C#, built at configure time into the cache folder) |
 | `Toolchains/Android.cmake` | Android NDK, arm64-v8a, API 24, the shared C++ runtime (`HELIX_ANDROID_STL_LIBRARY`, which applications carry) |
 | `Toolchains/Web.cmake` | Emscripten from the .NET `wasm-tools` workload |
 | `Presets/HelixPresets.json` | Configure, build and test presets for every platform |
@@ -91,6 +93,22 @@ ctest --preset windows-debug
 ```
 
 Web tests run under the Node.js that ships with the workload.
+
+On Windows the debug information of debug and fuzz builds is in the object files (`/Z7`). On the Web, test,
+benchmark and fuzz programs (`helix_add_executable(... CHECK)`, which the suites use) link at `-O1`: their objects keep
+the preset's optimization, binaryen over the whole module is for applications (a .NET web program takes the same
+through the target property `HELIX_WEB_LINK_OPTIMIZATION`).
+
+## Shared object cache
+
+With `HELIX_BUILD_CACHE` (the environment or a cache variable) naming a folder and the .NET SDK found, every C and C++
+compile runs through `HelixCompileCache`: the source is preprocessed, and the object is kept by the preprocessed text
+and the command line, with the build folder, the repository and each `External/Helix.*` folder written as names. A
+repository's copies in the `External` folders of different repositories, and files built again with the same
+content, so compile once per preset; a hit copies the stored object and gives the build the includes the
+preprocessor read, so the build's dependency tracking is the compiler's as without the cache. The folder holds at most
+`HELIX_BUILD_CACHE_SIZE` GB (20): at configure time the objects used least lately go. It is meant for local builds of
+several repositories; CI builds without it.
 
 ## License
 

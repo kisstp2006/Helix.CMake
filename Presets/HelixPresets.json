@@ -61,7 +61,7 @@
       "name": "windows-fuzz",
       "inherits": ["helix-windows", "helix-fuzz"],
       "cacheVariables": {
-        "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "/O2 /Ob2 /Zi",
+        "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "/O2 /Ob2",
         "CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO": "/DEBUG /INCREMENTAL:NO"
       }
     },

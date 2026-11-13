@@ -52,12 +52,20 @@ if(NOT EXISTS "${HELIX_EMSCRIPTEN_NODE}")
 endif()
 
 set(HELIX_EMSCRIPTEN_CONFIG "${CMAKE_BINARY_DIR}/helix.emscripten" CACHE INTERNAL "")
-file(WRITE "${HELIX_EMSCRIPTEN_CONFIG}"
+# Written only when its text changes (a configure leaves it as it was otherwise).
+string(CONCAT emscripten_config
     "LLVM_ROOT = r'${emsdk_tools}/bin'\n"
     "BINARYEN_ROOT = r'${emsdk_tools}'\n"
     "NODE_JS = r'${HELIX_EMSCRIPTEN_NODE}'\n"
     "CACHE = r'${cache_tools}/emscripten/cache'\n"
     "FROZEN_CACHE = True\n")
+set(emscripten_config_old "")
+if(EXISTS "${HELIX_EMSCRIPTEN_CONFIG}")
+    file(READ "${HELIX_EMSCRIPTEN_CONFIG}" emscripten_config_old)
+endif()
+if(NOT emscripten_config_old STREQUAL emscripten_config)
+    file(WRITE "${HELIX_EMSCRIPTEN_CONFIG}" "${emscripten_config}")
+endif()
 
 set(ENV{EM_CONFIG} "${HELIX_EMSCRIPTEN_CONFIG}")
 if(CMAKE_HOST_WIN32)
